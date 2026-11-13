@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 465px;
+    height: 244px;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  svg {
+    width: 100%;
+    height: 100%;
+    max-width: 440px;
+    max-height: 230px;
+  }
+</style>
+</head>
+<body>
+
+<svg viewBox="0 0 300 180">
+  <!-- Alambre homogéneo que cambia la forma de su curva -->
+  <path id="alambre" fill="none" stroke="#4d8c4a" stroke-width="6" stroke-linecap="round" />
+
+  <!-- Líneas sutiles de referencia hacia el centroide -->
+  <line id="guia" stroke="#88b86b" stroke-width="1.5" stroke-dasharray="4,4" />
+
+  <!-- Punto del centroide -->
+  <circle id="centroide" r="6" fill="#264d28" stroke="#ffffff" stroke-width="2" />
+</svg>
+
+<script>
+  const alambre = document.getElementById('alambre');
+  const centroide = document.getElementById('centroide');
+  const guia = document.getElementById('guia');
+
+  let t = 0;
+
+  function animar() {
+    t += 0.025;
+    const curvatura = (Math.sin(t) + 1) / 2;
+
+    const x1 = 45 + curvatura * 30;
+    const y1 = 135;
+    const x2 = 255 - curvatura * 30;
+    const y2 = 135;
+
+    const cx = 150;
+    const cy = 135 - curvatura * 115;
+
+    alambre.setAttribute('d', `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`);
+
+    const verticeY = 0.25 * y1 + 0.5 * cy + 0.25 * y2;
+    const centroideX = 150;
+    const centroideY = y1 - (y1 - verticeY) * 0.64;
+
+    centroide.setAttribute('cx', centroideX);
+    centroide.setAttribute('cy', centroideY);
+
+    guia.setAttribute('x1', 150);
+    guia.setAttribute('y1', verticeY);
+    guia.setAttribute('x2', centroideX);
+    guia.setAttribute('y2', centroideY);
+
+    requestAnimationFrame(animar);
+  }
+
+  animar();
+</script>
+</body>
+</html>
